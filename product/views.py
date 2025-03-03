@@ -3,37 +3,27 @@ from django.http import HttpResponse
 from employee.models import Employee
 from django.template import loader
 from .models import Category, Product
+from django.core import paginator
+from django.core.paginator import Paginator
 
 
-# Create your views here.
-
-def parents(request):
-    leaf = Category.objects.get(name='cat_name2')
-    cat_list = Category.objects.all()
-    child_categories=[]
-    for cat in cat_list:
-        if cat.id == leaf.parent_category_id_id:
-            child_categories.append(cat.name)
-            pass
-    context = {
-        'child_categories': child_categories,
-    }
-    return render(request, 'category.html', context)
+def category_list(request):
+    categories = Category.objects.all()
+    return render(request, 'category.html', {'categories': categories})
 
 
-def product_list(request):
-    latest_product_list = Product.objects.all()
-    template = loader.get_template("product.html")
-    context = {
-        "latest_product_list": latest_product_list,
-    }
-    return HttpResponse(template.render(context, request))
+def product_list(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    products = Product.objects.filter(category=category)
 
-def product_details(request,product_id):
-    details = Product.objects.filter(id=product_id).values()
-    # lis = [details[0]['id'], details[0]['name'] , details[0]['ratings'] ,details[0]['price'], details[0]['brand_id'], details[0]['category_id']]
-    # answer =''
-    # for i in lis:
-    #     answer+=" -> "+str(i)
-    
-    return HttpResponse(details)
+    paginator = Paginator(products, 4)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'product.html', {'page_obj': page_obj, 'category': category})
+
+
+# try:
+#         page_obj = paginator.page(page_number)
+#     except (EmptyPage, PageNotAnInteger):
+#         page_obj = None

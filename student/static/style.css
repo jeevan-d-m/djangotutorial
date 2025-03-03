@@ -1,0 +1,10 @@
+body {
+    background-color: lightblue;
+    font-family: verdana;
+  }
+
+#cont, #studcont{
+  display: flex;
+  margin-top: 200px;
+  justify-content: center;
+}

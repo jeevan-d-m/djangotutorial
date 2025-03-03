@@ -1,9 +1,107 @@
-{% if latest_employee_list %}
-    <ul>
-    {% for employee in latest_employee_list %}
-        <li><a href="/employees/{{ employee.id }}/">{{ employee.name }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No employees are available.</p>
-{% endif %}
+{% load static %}
+<head>
+    <title>Employee List</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+</head>
+<body>
+    <h2>Employee List</h2>
+
+    <label for="employee-dropdown">Select Employee:</label>
+    <select id="employee-dropdown" onchange="applyFilters()">
+        <option value="">All Employees</option>
+        {% for employee in all_employees %}
+        <option value="{{ employee.id }}" {% if request.GET.id == employee.id|stringformat:"s" %}selected{% endif %}>
+            {{ employee.name }}
+        </option>
+        {% endfor %}
+    </select>
+
+
+    <label for="email-dropdown">Select Email:</label>
+    <select id="email-dropdown" onchange="applyFilters()">
+        <option value="">All Emails</option>
+        {% for employee in all_employees %}
+        <option value="{{ employee.email }}" {% if request.GET.email == employee.email %}selected{% endif %}>
+            {{ employee.email }}
+        </option>
+        {% endfor %}
+    </select>
+
+
+    <label for="designation-dropdown">Select Designation:</label>
+    <select id="designation-dropdown" onchange="applyFilters()">
+        <option value="">All Designations</option>
+        {% for employee in all_employees %}
+        <option value="{{ employee.designation }}" {% if request.GET.designation == employee.designation %}selected{% endif %}>
+            {{ employee.designation }}
+        </option>
+        {% endfor %}
+    </select>
+
+
+    <button onclick="resetFilters()" class="btn btn-primary">Reset</button>
+
+
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Photo</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Designation</th>
+                <th>Salary</th>
+                <th>Experience</th>
+                <th>Department</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if employees %}
+            {% for employee in employees %}
+            <tr>
+                <td>{{ employee.id }}</td>
+                <td><center><img src="{%static 'images/'%}{{employee.photo}}" style="border-radius: 50%; width: 200px; height: 200px;"></center></td>
+                <td><a href="/employees/{{ employee.id }}/">{{ employee.name }}</a></td>
+                <td>{{employee.email }}</td>
+                <td>{{employee.designation }}</td>
+                <td>{{ employee.salary }}</td>
+                <td>{{ employee.experience}}</td>
+                <td>{{ employee.department.name }}</td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="7" class="text-center">No employees found.</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+    <script>
+        function applyFilters() {
+            let id = document.getElementById("employee-dropdown").value;
+            let email = document.getElementById("email-dropdown").value;
+            let designation = document.getElementById("designation-dropdown").value;
+            
+            let query = [];
+            if (id) query.push(`id=${id}`);
+            if (email) query.push(`email=${email}`);
+            if (designation) query.push(`designation=${designation}`);
+            
+            let url = "/employees/";
+            if (query.length > 0) url += "?" + query.join("&");
+            
+            window.location.href = url;
+        }
+
+        function resetFilters(){
+            document.getElementById("employee-dropdown").value = "";
+            document.getElementById("email-dropdown").value = "";
+            document.getElementById("designation-dropdown").value = "";
+
+            window.location.href = "/employees/";
+        }
+    </script>
+</body>
+

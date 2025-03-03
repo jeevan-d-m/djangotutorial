@@ -6,7 +6,7 @@ class Brand(models.Model):
 
 class Category(models.Model):
     name = models.CharField()
-    parent_category_id = models.ForeignKey('self', on_delete=models.CASCADE)
+    parent_category_id = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
 
 class Product(models.Model):
     name = models.CharField()
@@ -14,4 +14,3 @@ class Product(models.Model):
     price = models.BigIntegerField()
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-

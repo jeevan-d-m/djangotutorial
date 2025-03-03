@@ -1,0 +1,68 @@
+<head>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: grey;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>{{ student.name }}'s Result</h2>
+        <p><b>ID:</b> {{ student.id }}</p>
+        <p><b>Name:</b> {{ student.name }}</p>
+        <p><b>USN:</b> {{ student.USN }}</p>
+        <p><b>Current Semester:</b> {{ student.current_sem }}</p>
+
+        <table>
+            <tr>
+                <th>Semester</th>
+                <th>Subject</th>
+                <th>Marks</th>
+                <th>SGPA</th>
+            </tr>
+            {% for result in results %}
+                {% for subject in result.subjects %}
+                <tr>
+                    {% if forloop.first %}  
+                        <td rowspan="{{ result.subjects|length }}">{{ result.semester__id }}</td>
+                    {% endif %}
+                    <td>{{ subject.name }}</td>
+                    <td>{{ subject.marks }}</td>
+                    {% if forloop.first %}  
+                        <td rowspan="{{ result.subjects|length }}">{{ result.SGPA|floatformat:2 }}</td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            {% endfor %}
+        </table>
+    </div>
+</body>

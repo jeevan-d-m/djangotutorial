@@ -1,10 +1,44 @@
-{% if latest_employee_list %}
-    <ul>
-    {% for student in latest_employee_list %}
-        <li><a href="/student/{{student.id}}/">{{ student.name }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No students are available.</p>
-    {% endif %}
+{% load static %}
+<head>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <style>
+        body {
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 400px;
+            margin-top: 50px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2 style="text-align: center;">Result</h2>
+        <form action="{% url 'student_results' %}" method="GET">
+            <label for="usn">Enter USN:</label>
+            <input type="text" id="usn" name="usn" required>
+
+            <label for="semester">Enter Semester:</label>
+            <input type="number" id="semester" name="semester" required min="1">
+
+            <button class="btn btn-primary" type="submit">Get Results</button>
+        </form>
+    </div>
+</body>
 

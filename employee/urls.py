@@ -4,6 +4,6 @@ from django.contrib import admin
 
 
 urlpatterns = [
-    path("<int:employee_id>/", views.employees, name="employees"),
-    path("", views.index, name="index")
+    path("", views.index, name="index"),
+    path("<int:employee_id>/", views.employee_detail, name="employee_detail"),
 ]

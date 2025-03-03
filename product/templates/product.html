@@ -1,9 +1,73 @@
-{% if latest_product_list %}
-    <ul>
-    {% for product in latest_product_list %}
-        <li><a href="/products/{{product.id}}/">{{ product.name }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No products are available.</p>
-    {% endif %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Products</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            width: 250px;
+            text-align: left;
+        }
+        .pagination {
+            margin-top: 20px;
+        }
+
+        .pagination a {
+    text-decoration: none;
+    padding: 8px 12px;
+    margin: 0 5px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+}
+.pagination .disabled {
+    background-color: #ccc;
+    pointer-events: none;
+}
+
+</style>
+</head>
+<body>
+    <h1>Products in {{ category.name }}</h1>
+    <div class="container">
+        {% for product in page_obj %}
+            <div class="card">
+                <h3>{{ product.name }}</h3>
+                <p><b>Ratings:</b> {{ product.ratings }}⭐</p>
+                <p><b>Price:</b> ${{ product.price }}</p>
+                <p><b>Brand:</b> {{ product.brand.name }}</p>
+                <p><b>Category:</b> {{ product.category.name }}</p>
+            </div>
+        {% empty %}
+            <p>No products available in this category.</p>
+        {% endfor %}
+    </div>
+
+    <div class="pagination">
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <a class="disabled">{{ num }}</a>
+            {% else %}
+                <a href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <br>
+    <a href="{% url 'category_list' %}">Back to Categories</a>
+</body>
+</html>
+

@@ -1,13 +1,51 @@
-{% if child_categories %}
-    <ul class="list-group">
-    {% for students in child_categories %}
-        <li class="list-group-item" >{{ students }}</a></li>
-    {% endfor %}
-    </ul>
- 
-    {% block content %}
-    {% endblock %}
- 
-{% else %}
-    <p>No polls are available.</p>
-{% endif %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Categories</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            margin-top: 20px;
+            padding: 20px;
+            border: 2px solid #007bff;
+            border-radius: 10px;
+            display: inline-block;
+            background: white;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 10px 0;
+        }
+        a {
+            text-decoration: none;
+            font-size: 18px;
+            color: #007bff;
+            padding: 10px 50px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            display: inline-block;
+            width: 150px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Categories</h1>
+    <div class="container">
+        <ul>
+            {% for category in categories %}
+                <li><a href="{% url 'product_list' category.id %}">{{ category.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

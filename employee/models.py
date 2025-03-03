@@ -18,6 +18,8 @@ class Employee(models.Model):
     salary = models.IntegerField()
     experience = models.SmallIntegerField()
     department = models.ForeignKey("department", on_delete=models.CASCADE)
+    photo = models.CharField(max_length=200, default="", editable=False)
+
 
 class Contact_details(models.Model):
     number = models.BigIntegerField()
