@@ -52,11 +52,10 @@
             
 
             {% for result in results %}
-                <!-- <tr>{{result}}</tr> -->
                 {% for subject in result.subjects %}
                 <tr>
                     {% if forloop.first %}  
-                        <td rowspan="{{ result.subjects|length }}">{{ result.semester__id }}</td>
+                        <td rowspan="{{ result.subjects|length }}">{{ result.semester_id }}</td>
                     {% endif %}
                     <td>{{ subject.name }}</td>
                     <td>{{ subject.marks }}</td>

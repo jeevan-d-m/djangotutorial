@@ -36,21 +36,21 @@ router.register(r'student', s.StudentViewSet)
 router.register(r'subject', s.SubjectViewSet)
 router.register(r'result', s.ResultViewSet)
 
-urlpatterns = [
-    path('', include(router.urls)),
-        path('', include('student.urls')),
-
-    path('departments/<int:department_id>/employees/', e.DepartmentEmployeeViewSet.as_view({'get': 'list'})),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
-]
-
-
-
-
 # urlpatterns = [
-#     path('admin/', admin.site.urls),
-#     path('employees/',include('employee.urls')),
-#     path('', include('student.urls')),
-#     path('',include('product.urls')),
+#     path('', include(router.urls)),
+#         path('', include('student.urls')),
+
+#     path('departments/<int:department_id>/employees/', e.DepartmentEmployeeViewSet.as_view({'get': 'list'})),
+#     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 # ]
+
+
+
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('employees/',include('employee.urls')),
+    path('', include('student.urls')),
+    path('',include('product.urls')),
+]
 
