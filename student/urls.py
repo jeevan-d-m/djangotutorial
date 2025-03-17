@@ -5,3 +5,4 @@ urlpatterns = [
     path('student/', student_list, name='student_list'),
     path('results/', student_results, name='student_results'),
 ]
+

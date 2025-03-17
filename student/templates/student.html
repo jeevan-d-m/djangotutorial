@@ -31,11 +31,11 @@
     <div class="container">
         <h2 style="text-align: center;">Result</h2>
         <form action="{% url 'student_results' %}" method="GET">
-            <label for="usn">Enter USN:</label>
+            <label for="usn">Enter USN:</label> 
             <input type="text" id="usn" name="usn" required>
 
             <label for="semester">Enter Semester:</label>
-            <input type="number" id="semester" name="semester" required min="1">
+            <input type="text" id="semester" name="semester" required>
 
             <button class="btn btn-primary" type="submit">Get Results</button>
         </form>

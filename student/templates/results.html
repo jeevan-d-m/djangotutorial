@@ -49,7 +49,10 @@
                 <th>Marks</th>
                 <th>SGPA</th>
             </tr>
+            
+
             {% for result in results %}
+                <!-- <tr>{{result}}</tr> -->
                 {% for subject in result.subjects %}
                 <tr>
                     {% if forloop.first %}  
