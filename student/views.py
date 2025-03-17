@@ -61,35 +61,28 @@ def student_list(request):
 
 
 def student_results(request):
-
-    allowed_parameters = {'usn','semester'}
+    allowed_parameters = {'usn', 'semester'}
 
     unexpected_params = set(request.GET.keys()) - allowed_parameters
     if unexpected_params:
         return HttpResponse(f"Invalid query parameters: {unexpected_params}")
-    
-    
+
     usn = request.GET.get('usn')
     semester = request.GET.get('semester')
 
     usn_value = Student.objects.filter(USN=usn)
-    # print(usn_value)
-    
-    if len(usn_value)==0:
+
+    if not usn_value.exists():
         return HttpResponse("""<script>
         alert("invalid usn");
         window.location.replace("http://localhost:8000/student/")
     </script>""")
 
-        
     if not semester or not semester.isdigit():
         return HttpResponse("""<script>
         alert("invalid data");
         window.location.replace("http://localhost:8000/student/")
     </script>""")
-
-        # return HttpResponse("<script>alert('invalid');</script>")
-        
 
     semester = int(semester)
 
@@ -101,28 +94,32 @@ def student_results(request):
     if semester > student.current_sem:
         return HttpResponse("Given Semester is greater than current semester")
 
-    if not Result.objects.filter(student=student, semester_id=semester).exists():
+    results = Result.objects.filter(student=student, semester_id=semester)
+
+    if not results.exists():
         return HttpResponse("Invalid values: No results found for this semester")
 
-    results = (Result.objects.filter(student=student, semester_id=semester).values('semester__id').annotate(SGPA=ExpressionWrapper(Sum('marks') / Count('subject'), output_field=FloatField())))
+    subject_list = []
+    total_marks = 0
+    total_subjects = 0
 
     for result in results:
-        subjects = Result.objects.filter(student=student, semester_id=result['semester__id']).values('subject__name', 'marks')
-        # result["subjects"] = [{"name": s["subject__name"], "marks": s["marks"]} for s in subjects]
-        result["subjects"] = []
-        for s in subjects:
-            subject_data = {  
-            "name": s["subject__name"],  
-            "marks": s["marks"]
-            }  
-            result["subjects"].append(subject_data)
+        subject_list.append({"name": result.subject.name, "marks": result.marks})
+        total_marks += result.marks
+        total_subjects += 1
+
+    if total_subjects > 0:
+        SGPA = total_marks / total_subjects  
+    else:
+        SGPA = 0.0
 
     template = loader.get_template('results.html')
     context = {
         "student": student,
-        "results": results,
+        "results": [{"semester_id": semester, "SGPA": SGPA, "subjects": subject_list}],
     }
     return HttpResponse(template.render(context, request))
+
 
 
 
