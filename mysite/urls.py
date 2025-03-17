@@ -16,12 +16,41 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework import routers
+
+from employee import views as e
+from product import views as p
+from student import views as s
+
+
+router = routers.DefaultRouter()
+router.register(r'employees', e.EmployeeViewSet)
+router.register(r'departments', e.DepartmentViewSet)
+router.register(r'location', e.LocationViewSet)
+router.register(r'contact', e.ContactViewSet)
+router.register(r'brand', p.BrandViewSet)
+router.register(r'categories', p.CategoryViewSet)
+router.register(r'product', p.ProductViewSet)
+router.register(r'semester', s.SemesterViewSet)
+router.register(r'student', s.StudentViewSet)
+router.register(r'subject', s.SubjectViewSet)
+router.register(r'result', s.ResultViewSet)
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('employees/',include('employee.urls')),
-    # path('student/', include('student.urls')),
-    path('', include('student.urls')),
-    path('',include('product.urls')),
-    # path('products/',include('product.urls')),
+    path('', include(router.urls)),
+        path('', include('student.urls')),
+
+    path('departments/<int:department_id>/employees/', e.DepartmentEmployeeViewSet.as_view({'get': 'list'})),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
+
+
+
+
+# urlpatterns = [
+#     path('admin/', admin.site.urls),
+#     path('employees/',include('employee.urls')),
+#     path('', include('student.urls')),
+#     path('',include('product.urls')),
+# ]
+
