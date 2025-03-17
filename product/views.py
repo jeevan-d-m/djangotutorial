@@ -6,6 +6,11 @@ from .models import Category, Product
 from django.core import paginator
 from django.core.paginator import Paginator
 
+from rest_framework import permissions, viewsets
+
+from product.models import Brand, Category, Product
+from product.serializers import BrandSerializer, CategorySerializer, ProductSerializer
+
 
 def category_list(request):
     categories = Category.objects.all()
@@ -27,3 +32,25 @@ def product_list(request, category_id):
 #         page_obj = paginator.page(page_number)
 #     except (EmptyPage, PageNotAnInteger):
 #         page_obj = None
+
+class BrandViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = Brand.objects.all().order_by('id')
+    serializer_class = BrandSerializer
+
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows Departments to be viewed or edited.
+    """
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+class ProductViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows Departments to be viewed or edited.
+    """
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
